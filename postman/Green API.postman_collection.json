@@ -300,7 +300,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"christopher\",\r\n    \"email\": \"cbandurski1@gmail.com\",\r\n    \"role\": [\"ROLE_USER\"],\r\n    \"password\": \"sausage\"\r\n}",
+                  "raw": "{\r\n    \"username\": \"Your name here\",\r\n    \"email\": \"someone@gmail.com\",\r\n    \"role\": [\"student\"],\r\n    \"password\": \"sausages\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -339,7 +339,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"christopher\",\r\n    \"password\": \"sausage\"\r\n}",
+                  "raw": "{\r\n    \"username\": \"Your name here\",\r\n    \"password\": \"sausages\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
