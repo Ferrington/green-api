@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -58,7 +58,6 @@ public class StudentService {
         existingStudent.setFanPageUrl(student.getFanPageUrl());
         existingStudent.setPortfolioUrl(student.getPortfolioUrl());
         existingStudent.setProjects(student.getProjects());
-        System.out.println(existingStudent);
 
         return studentRepository.save(existingStudent);
     }
