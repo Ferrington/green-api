@@ -14,7 +14,7 @@ public class Student {
     private String fanPageUrl;
 
     @Column(name = "portfolio_url")
-    private String portolioUrl;
+    private String portfolioUrl;
 
     @OneToMany(mappedBy="student")
     private List<Project> projects;
@@ -22,10 +22,18 @@ public class Student {
     public Student() {
     }
 
-    public Student(String fanPageUrl, String portolioUrl, List<Project> projects) {
+    public Student(String fanPageUrl, String portfolioUrl, List<Project> projects) {
         this.fanPageUrl = fanPageUrl;
-        this.portolioUrl = portolioUrl;
+        this.portfolioUrl = portfolioUrl;
         this.projects = projects;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFanPageUrl() {
@@ -36,12 +44,12 @@ public class Student {
         this.fanPageUrl = fanPageUrl;
     }
 
-    public String getPortolioUrl() {
-        return portolioUrl;
+    public String getPortfolioUrl() {
+        return portfolioUrl;
     }
 
-    public void setPortolioUrl(String portolioUrl) {
-        this.portolioUrl = portolioUrl;
+    public void setPortfolioUrl(String portfolioUrl) {
+        this.portfolioUrl = portfolioUrl;
     }
 
     public List<Project> getProjects() {
