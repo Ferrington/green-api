@@ -1,5 +1,6 @@
 package com.techelevator.green.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 @Table(name = "students")
 public class Student {
     @Id
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @Column(name = "fan_page_url")
@@ -16,6 +18,7 @@ public class Student {
     @Column(name = "portfolio_url")
     private String portfolioUrl;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @OneToMany(mappedBy="student")
     private List<Project> projects;
 
