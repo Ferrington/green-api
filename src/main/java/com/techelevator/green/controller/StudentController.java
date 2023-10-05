@@ -43,7 +43,7 @@ public class StudentController {
     @DeleteMapping("/{studentId}")
     @PreAuthorize("hasRole('STUDENT')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteStudent(@PathVariable Long studentId) {
-        studentService.deleteStudent(studentId);
+    public void deleteStudent(@PathVariable Long studentId, Principal principal) {
+        studentService.deleteStudent(studentId, principal);
     }
 }

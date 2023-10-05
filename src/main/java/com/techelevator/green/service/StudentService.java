@@ -27,7 +27,7 @@ public class StudentService {
     }
 
     public Student getStudent(long studentId) {
-        Optional<Student> student = studentRepository.findStudentById(studentId);
+        Optional<Student> student = studentRepository.findById(studentId);
         if (student.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found.");
         }
@@ -37,7 +37,7 @@ public class StudentService {
 
     public Student createStudent(Student student, Principal principal) {
         Long userId = getUserId(principal);
-        Optional<Student> studentData = studentRepository.findStudentById(userId);
+        Optional<Student> studentData = studentRepository.findById(userId);
         if (studentData.isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Student already exists.");
         }
@@ -49,10 +49,15 @@ public class StudentService {
     public Student updateStudent(Long studentId, Student student, Principal principal) {
         Long userId = getUserId(principal);
 
+        if (!userId.equals(studentId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to modify this student.");
+        }
+
         Optional<Student> optStudent = studentRepository.findById(studentId);
         if (optStudent.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found.");
         }
+
         Student existingStudent = optStudent.get();
         existingStudent.setId(studentId);
         existingStudent.setFanPageUrl(student.getFanPageUrl());
@@ -62,7 +67,15 @@ public class StudentService {
         return studentRepository.save(existingStudent);
     }
 
-    public void deleteStudent(Long studentId) {
+    public void deleteStudent(Long studentId, Principal principal) {
+        Long userId = getUserId(principal);
+
+        Optional<Student> optStudent = studentRepository.findById(studentId);
+        if (optStudent.isEmpty()) return;
+        if (!userId.equals(optStudent.get().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this student.");
+        }
+
         studentRepository.deleteById(studentId);
     }
 
