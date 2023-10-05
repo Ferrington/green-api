@@ -14,11 +14,8 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="student_id")
     private Student student;
-
     private String url;
-
     private String name;
-
     private String description;
 
     public Long getId() {
