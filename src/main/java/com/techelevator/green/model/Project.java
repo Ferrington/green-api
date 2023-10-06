@@ -2,10 +2,17 @@ package com.techelevator.green.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "projects")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -17,28 +24,5 @@ public class Project {
     private String url;
     private String name;
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Student getStudentData() {
-        return student;
-    }
-
-    public void setStudentData(Student student) {
-        this.student = student;
-    }
+    
 }
