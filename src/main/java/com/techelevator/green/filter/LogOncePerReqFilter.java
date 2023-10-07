@@ -60,7 +60,10 @@ public class LogOncePerReqFilter extends OncePerRequestFilter {
     private void logReqRes(String request, String response, String uri, String httpMethod, Principal principal) {
         Action action = new Action();
 
-        action.setRequestBody(unprettifyJson(request));
+        if (request.startsWith("{")) {
+            request = unprettifyJson(request);
+        }
+        action.setRequestBody(request);
         action.setResponseBody(response);
         action.setUri(uri);
         action.setHttpMethod(httpMethod);
