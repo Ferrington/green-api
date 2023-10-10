@@ -2,6 +2,8 @@ package com.techelevator.green.controller;
 
 import com.techelevator.green.model.Project;
 import com.techelevator.green.service.ProjectService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ public class ProjectController {
     portfolio and fanpage, not sure what else.
      */
     @GetMapping
+    @PreAuthorize("permitAll")
     public List<Project> listProjects(@RequestParam String name, @RequestParam String student) {
         if (!name.isEmpty() && !student.isEmpty()) {
             return projectService.getProjectsByNameAndStudent(name, student);
@@ -37,10 +40,15 @@ public class ProjectController {
     //I also want an authorized endpoint where students can update, delete, create projects
     //will need to look into how this works, so they can only mess with their own, because it could be disastrous if,
     //say, I could update Christopher's projects or something. For now...will try these.
+    //maybe I need to do an if statement that checks if the user's id doesn't match the project's student id
+    //then throw an unauthorized exception if that's true???????????
 
-    @GetMapping(path="/id")
+
+    @GetMapping(path="/project/{id}")
+    @PreAuthorize("isAuthenticated()")
     public Project getProject(@PathVariable Long id) {
         return projectService.getById(id);
     }
+
 
 }

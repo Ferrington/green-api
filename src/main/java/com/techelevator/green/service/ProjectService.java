@@ -38,4 +38,8 @@ public class ProjectService {
         return project.get();
     }
 
+    public Project createProject() {
+        return null;
+    }
+
 }
