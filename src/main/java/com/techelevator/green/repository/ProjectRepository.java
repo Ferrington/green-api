@@ -9,23 +9,9 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    //Create
+    List<Project> findByNameIgnoreCase(String name);
 
+    List<Project> findByStudent(String student);
 
-    //Read
-    @Override
-    List<Project> findAll();
-
-    List<Project> findProjectByProjectName(String projectName);
-
-    List<Project> findProjectByStudent(String student);
-
-    List<Project> findProjectByNameAndStudent(String name, String student);
-
-    //Update
-
-
-    //Delete
-
-
+    List<Project> findByNameAndStudent(String name, String student);
 }

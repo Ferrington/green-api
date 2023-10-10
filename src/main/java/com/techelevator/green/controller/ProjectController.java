@@ -13,23 +13,34 @@ public class ProjectController {
 
     ProjectService projectService;
 
-    //see all projects
     /*
     so my idea here is that this page is going to have a bunch of divs that will represent projects and we can look up projects by student name,
-    project name, or see a full list
+    project name, both?? (can remove) or see a full list
+
+    Note to Sam: maybe also add a category for projects - so we can search by category.
+    The OG idea of this site by Daniel was to display fan pages so it'd be fun to be able to just look at those
+    Would need to consult with someone??? about category options - obvi
+    portfolio and fanpage, not sure what else.
      */
     @GetMapping
     public List<Project> listProjects(@RequestParam String name, @RequestParam String student) {
-        if (!name.isEmpty() && student.isEmpty()) {
-            return projectService.getProjectsByName(name);
+        if (!name.isEmpty() && !student.isEmpty()) {
+            return projectService.getProjectsByNameAndStudent(name, student);
         } else if (name.isEmpty() && !student.isEmpty()) {
             return projectService.getProjectsByStudent(student);
-        } else if (!name.isEmpty() && !student.isEmpty()) {
-            return projectService.getProjectsByNameAndStudent(name, student);
+        } else if (!name.isEmpty() && student.isEmpty()) {
+            return projectService.getProjectsByName(name);
         }
         return projectService.getAllProjects();
     }
 
-    //I also want a further endpoint to get more information about a particular project.....maybe?
+    //I also want an authorized endpoint where students can update, delete, create projects
+    //will need to look into how this works, so they can only mess with their own, because it could be disastrous if,
+    //say, I could update Christopher's projects or something. For now...will try these.
+
+    @GetMapping(path="/id")
+    public Project getProject(@PathVariable Long id) {
+        return projectService.getById(id);
+    }
 
 }
