@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -15,15 +16,6 @@ public class ProjectController {
 
     ProjectService projectService;
 
-    /*
-    so my idea here is that this page is going to have a bunch of divs that will represent projects and we can look up projects by student name,
-    project name, both?? (can remove) or see a full list
-
-    Note to Sam: maybe also add a category for projects - so we can search by category.
-    The OG idea of this site by Daniel was to display fan pages so it'd be fun to be able to just look at those
-    Would need to consult with someone??? about category options - obvi
-    portfolio and fanpage, not sure what else.
-     */
     @GetMapping
     @PreAuthorize("permitAll")
     public List<Project> listProjects(@RequestParam String name, @RequestParam String student) {
@@ -45,10 +37,27 @@ public class ProjectController {
 
 
     @GetMapping(path="/project/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public Project getProject(@PathVariable Long id) {
+    @PreAuthorize("permitAll")
+    public Project getProject(@PathVariable long id) {
         return projectService.getById(id);
     }
 
+    @PostMapping
+    @PreAuthorize("hasRole('STUDENT')")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Project createProject(@RequestBody Project project) {
+        return projectService.createProject(project);
+    }
+
+    @PutMapping(path="/project/{id]")
+    @PreAuthorize("hasRole('STUDENT')")
+    public Project updateProject(@PathVariable Long id, @RequestBody Project project, Principal principal) {
+        return projectService.updateProject(id, project, principal);
+    }
+
+    @DeleteMapping(path="/project/{id}")
+    @PreAuthorize("hasRole('STUDENT')")
+    public void deleteProject(@PathVariable Long id, Principal principal) {
+    }
 
 }

@@ -1,12 +1,15 @@
 package com.techelevator.green.service;
 
 import com.techelevator.green.model.Project;
+import com.techelevator.green.model.auth.User;
 import com.techelevator.green.repository.ProjectRepository;
+import com.techelevator.green.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,9 @@ public class ProjectService {
 
     @Autowired
     ProjectRepository projectRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     public List<Project> getAllProjects() { return projectRepository.findAll();}
 
@@ -38,8 +44,45 @@ public class ProjectService {
         return project.get();
     }
 
-    public Project createProject() {
-        return null;
+
+    public Project createProject(Project project) {
+        //so, I'm not doing any checks here because a student can have many projects
+        //I could maybe check to see if a project with the same name already exists and is
+        //associated with that student, to throw an error.
+        //It doesn't feel entirely necessary to me? Happy to add it if someone wants it implemented!
+        return projectRepository.save(project);
     }
+
+    public Project updateProject(Long projectId, Project project, Principal principal) {
+        Long userId = getUserId(principal);
+        if (!userId.equals(project.getStudent().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to modify project.");
+        }
+
+        Optional<Project> optProject = projectRepository.findById(projectId);
+        if (optProject.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found.");
+        }
+
+        Project existingProject = optProject.get();
+        existingProject.setUrl(project.getUrl());
+        existingProject.setStudent(project.getStudent());
+        existingProject.setName(project.getName());
+        existingProject.setId(project.getId());
+        existingProject.setDescription(project.getDescription());
+
+        return projectRepository.save(existingProject);
+    }
+
+
+
+    private Long getUserId(Principal principal) {
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Logged in user does not exist.");
+        }
+        return user.get().getId();
+    }
+
 
 }
