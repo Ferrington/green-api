@@ -24,18 +24,6 @@ public class ProjectService {
 
     public List<Project> getAllProjects() { return projectRepository.findAll();}
 
-    public List<Project> getProjectsByName(String name) {
-        return projectRepository.findByNameIgnoreCase(name);
-    }
-
-    public List<Project> getProjectsByStudent(String student) {
-        return projectRepository.findByStudent(student);
-    }
-
-    public List<Project> getProjectsByNameAndStudent(String name, String student) {
-        return projectRepository.findByNameAndStudent(name, student);
-    }
-
     public Project getById(Long id) {
         Optional<Project> project = projectRepository.findById(id);
         if(project.isEmpty()) {
@@ -46,10 +34,6 @@ public class ProjectService {
 
 
     public Project createProject(Project project) {
-        //so, I'm not doing any checks here because a student can have many projects
-        //I could maybe check to see if a project with the same name already exists and is
-        //associated with that student, to throw an error.
-        //It doesn't feel entirely necessary to me? Happy to add it if someone wants it implemented!
         return projectRepository.save(project);
     }
 
