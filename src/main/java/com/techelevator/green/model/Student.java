@@ -1,5 +1,6 @@
 package com.techelevator.green.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonPropertyOrder({ "id", "fanPageUrl", "portfolioUrl", "projects"})
 public class Student {
 
     @Id
