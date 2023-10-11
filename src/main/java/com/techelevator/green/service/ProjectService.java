@@ -74,6 +74,17 @@ public class ProjectService {
         return projectRepository.save(existingProject);
     }
 
+    public void deleteProject(Long projectId, Principal principal) {
+        Long userId = getUserId(principal);
+
+        Optional<Project> optProject = projectRepository.findById(projectId);
+        if(!userId.equals(optProject.get().getStudent().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this project.");
+        }
+
+        projectRepository.deleteById(projectId);
+    }
+
 
 
     private Long getUserId(Principal principal) {

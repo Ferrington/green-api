@@ -58,6 +58,8 @@ public class ProjectController {
     @DeleteMapping(path="/project/{id}")
     @PreAuthorize("hasRole('STUDENT')")
     public void deleteProject(@PathVariable Long id, Principal principal) {
+        projectService.deleteProject(id, principal);
     }
+
 
 }
