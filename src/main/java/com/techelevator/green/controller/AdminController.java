@@ -1,12 +1,10 @@
 package com.techelevator.green.controller;
 
+import com.techelevator.green.payload.response.TableResponse;
 import com.techelevator.green.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,10 @@ public class AdminController {
     @GetMapping("/tables")
     public List<String> getTableNames() {
         return adminService.getTableNames();
+    }
+
+    @GetMapping("/tables/{name}/{page}")
+    public TableResponse getTable(@PathVariable String name, @PathVariable int page) {
+        return adminService.getTable(name, page);
     }
 }
