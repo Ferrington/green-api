@@ -1,5 +1,6 @@
 package com.techelevator.green.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -39,6 +40,7 @@ public class User {
 
   @NotBlank
   @Size(max = 120)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)
