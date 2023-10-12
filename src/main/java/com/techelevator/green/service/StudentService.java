@@ -1,6 +1,8 @@
 package com.techelevator.green.service;
 
 import com.techelevator.green.model.Student;
+import com.techelevator.green.model.auth.ERole;
+import com.techelevator.green.model.auth.Role;
 import com.techelevator.green.model.auth.User;
 import com.techelevator.green.repository.StudentRepository;
 import com.techelevator.green.repository.UserRepository;
@@ -49,7 +51,7 @@ public class StudentService {
     public Student updateStudent(Long studentId, Student student, Principal principal) {
         Long userId = getUserId(principal);
 
-        if (!userId.equals(studentId)) {
+        if (!isAdmin(principal) && !userId.equals(studentId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to modify this student.");
         }
 
@@ -72,7 +74,7 @@ public class StudentService {
 
         Optional<Student> optStudent = studentRepository.findById(studentId);
         if (optStudent.isEmpty()) return;
-        if (!userId.equals(optStudent.get().getId())) {
+        if (!isAdmin(principal) && !userId.equals(optStudent.get().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this student.");
         }
 
@@ -85,5 +87,14 @@ public class StudentService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Logged in user does not exist.");
         }
         return user.get().getId();
+    }
+
+    private boolean isAdmin(Principal principal) {
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Logged in user does not exist.");
+        }
+
+        return user.get().getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_ADMIN));
     }
 }

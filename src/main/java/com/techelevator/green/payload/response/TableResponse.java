@@ -12,6 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TableResponse {
+    private String table;
     private Page<?> page;
-    private List<KeyValue<String, String>> types;
+    private List<String> fieldOrder;
+    private Map<String, String> types;
 }

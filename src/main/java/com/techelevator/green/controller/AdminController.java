@@ -22,8 +22,12 @@ public class AdminController {
         return adminService.getTableNames();
     }
 
-    @GetMapping("/tables/{name}/{page}")
-    public TableResponse getTable(@PathVariable String name, @PathVariable int page) {
-        return adminService.getTable(name, page);
+    @GetMapping("/tables/{tableName}")
+    public TableResponse getTable(@PathVariable String tableName,
+                                  @RequestParam(defaultValue = "0") String pageNumber,
+                                  @RequestParam(defaultValue = "id") String sortColumn,
+                                  @RequestParam(defaultValue = "asc") String sortDir) {
+        return adminService.getTable(tableName, pageNumber, sortColumn, sortDir);
     }
+
 }

@@ -29,20 +29,20 @@ public class StudentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Student createStudent(@RequestBody Student student, Principal principal) {
         return studentService.createStudent(student, principal);
     }
 
     @PutMapping("/{studentId}")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public Student updateStudent(@PathVariable Long studentId, @RequestBody Student student, Principal principal) {
         return studentService.updateStudent(studentId, student, principal);
     }
 
     @DeleteMapping("/{studentId}")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteStudent(@PathVariable Long studentId, Principal principal) {
         studentService.deleteStudent(studentId, principal);
