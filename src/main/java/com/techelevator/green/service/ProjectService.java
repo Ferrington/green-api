@@ -52,7 +52,6 @@ public class ProjectService {
         existingProject.setUrl(project.getUrl());
         existingProject.setStudent(project.getStudent());
         existingProject.setName(project.getName());
-        existingProject.setId(project.getId());
         existingProject.setDescription(project.getDescription());
 
         return projectRepository.save(existingProject);
@@ -62,6 +61,7 @@ public class ProjectService {
         Long userId = getUserId(principal);
 
         Optional<Project> optProject = projectRepository.findById(projectId);
+        if (optProject.isEmpty()) return;
         if(!userId.equals(optProject.get().getStudent().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this project.");
         }

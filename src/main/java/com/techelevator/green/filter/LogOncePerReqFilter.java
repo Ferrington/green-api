@@ -17,7 +17,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.security.Principal;
 
-@Component
+
 public class LogOncePerReqFilter extends OncePerRequestFilter {
 
     @Autowired
