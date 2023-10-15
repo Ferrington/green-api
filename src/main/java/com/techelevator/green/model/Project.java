@@ -1,5 +1,6 @@
 package com.techelevator.green.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name="student_id")
+    @JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
     private Student student;
     private String url;
     private String name;
