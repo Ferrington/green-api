@@ -28,13 +28,6 @@ public class StudentController {
         return studentService.getStudent(studentId);
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Student createStudent(@RequestBody Student student, Principal principal) {
-        return studentService.createStudent(student, principal);
-    }
-
     @PutMapping("/{studentId}")
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public Student updateStudent(@PathVariable Long studentId, @RequestBody Student student, Principal principal) {
