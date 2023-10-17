@@ -23,9 +23,6 @@ public class AdminService {
     @Autowired
     EntityManager entityManager;
 
-    @Autowired
-    StudentRepository studentRepository;
-
     public List<String> getTableNames() {
         return entityManager
                 .getMetamodel()

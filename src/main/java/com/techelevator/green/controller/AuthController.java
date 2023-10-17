@@ -12,6 +12,7 @@ import com.techelevator.green.repository.RoleRepository;
 import com.techelevator.green.repository.UserRepository;
 import com.techelevator.green.security.jwt.JwtUtils;
 import com.techelevator.green.security.services.UserDetailsImpl;
+import com.techelevator.green.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,9 @@ public class AuthController {
     RoleRepository roleRepository;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -62,47 +66,6 @@ public class AuthController {
 
         return ResponseEntity
                 .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
-
-        strRoles.forEach(role -> {
-            switch (role) {
-                case "student" -> {
-                    Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(studentRole);
-                }
-                case "admin" -> {
-                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(adminRole);
-                }
-                default -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role.");
-                }
-            }
-        });
-
-        user.setRoles(roles);
-        if (strRoles.contains("student")) {
-            Student student = new Student();
-            user.setStudent(student);
-            student.setUser(user);
-        }
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
 }

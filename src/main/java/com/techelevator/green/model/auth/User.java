@@ -30,6 +30,7 @@ public class User {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Student student;
 
   @NotBlank
