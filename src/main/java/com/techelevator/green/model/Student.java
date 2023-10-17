@@ -1,5 +1,6 @@
 package com.techelevator.green.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.techelevator.green.model.auth.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,12 +21,12 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     @MapsId
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
     @Column(name = "fan_page_url")
