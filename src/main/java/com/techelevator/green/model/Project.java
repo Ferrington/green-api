@@ -1,6 +1,7 @@
 package com.techelevator.green.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Project {
 
     @Id
@@ -21,7 +25,6 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name="student_id")
-    @JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
     private Student student;
     private String url;
     private String name;

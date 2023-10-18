@@ -2,7 +2,6 @@ package com.techelevator.green.service;
 
 import com.techelevator.green.model.Student;
 import com.techelevator.green.model.auth.ERole;
-import com.techelevator.green.model.auth.Role;
 import com.techelevator.green.model.auth.User;
 import com.techelevator.green.repository.StudentRepository;
 import com.techelevator.green.repository.UserRepository;
@@ -67,18 +66,6 @@ public class StudentService {
         existingStudent.setProjects(student.getProjects());
 
         return studentRepository.save(existingStudent);
-    }
-
-    public void deleteStudent(Long studentId, Principal principal) {
-        Long userId = getUserId(principal);
-
-        Optional<Student> optStudent = studentRepository.findById(studentId);
-        if (optStudent.isEmpty()) return;
-        if (!isAdmin(principal) && !userId.equals(optStudent.get().getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this student.");
-        }
-
-        studentRepository.deleteById(studentId);
     }
 
     private Long getUserId(Principal principal) {

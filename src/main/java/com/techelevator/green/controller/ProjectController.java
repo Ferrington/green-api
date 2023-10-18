@@ -29,20 +29,20 @@ public class ProjectController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN)")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);
     }
 
     @PutMapping(path="/{id}")
-    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN)")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public Project updateProject(@PathVariable Long id, @RequestBody Project project, Principal principal) {
         return projectService.updateProject(id, project, principal);
     }
 
     @DeleteMapping(path="/{id}")
-    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN)")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteProject(@PathVariable Long id, Principal principal) {
         projectService.deleteProject(id, principal);
