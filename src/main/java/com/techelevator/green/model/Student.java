@@ -31,7 +31,6 @@ public class Student {
     @OneToOne
     @JoinColumn(name = "user_id")
     @MapsId
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
     @Column(name = "fan_page_url")

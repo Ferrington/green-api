@@ -1,7 +1,9 @@
 package com.techelevator.green.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.techelevator.green.model.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +24,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({"id", "username", "password", "roles"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
 
   @Id
@@ -30,7 +35,6 @@ public class User {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Student student;
 
   @NotBlank
