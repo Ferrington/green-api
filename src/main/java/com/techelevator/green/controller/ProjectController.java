@@ -23,6 +23,7 @@ public class ProjectController {
         return projectService.getAllProjects();
     }
 
+
     @GetMapping(path="/{id}")
     public Project getProject(@PathVariable long id) {
         return projectService.getById(id);
