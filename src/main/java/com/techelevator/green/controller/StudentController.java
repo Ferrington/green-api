@@ -1,6 +1,8 @@
 package com.techelevator.green.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.techelevator.green.model.Student;
+import com.techelevator.green.model.view.View;
 import com.techelevator.green.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,11 +20,13 @@ public class StudentController {
     StudentService studentService;
 
     @GetMapping
+    @JsonView(View.NonAdmin.class)
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/{studentId}")
+    @JsonView(View.NonAdmin.class)
     public Student getStudent(@PathVariable long studentId) {
         return studentService.getStudent(studentId);
     }

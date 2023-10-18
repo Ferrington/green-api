@@ -1,10 +1,8 @@
 package com.techelevator.green.model.auth;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.techelevator.green.model.Student;
+import com.techelevator.green.model.view.View;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -31,15 +29,20 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(View.NonAdmin.class)
   private Long id;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
+  @JsonView(View.NonAdmin.class)
   private Student student;
 
   @NotBlank
   @Size(max = 20)
+  @JsonView(View.NonAdmin.class)
   private String username;
+
+  private String setPasswordUrl;
 
   @NotBlank
   @Size(max = 120)
