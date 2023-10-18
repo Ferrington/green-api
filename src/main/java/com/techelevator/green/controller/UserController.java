@@ -24,8 +24,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers(@RequestParam(name="student", defaultValue = "false") String isStudent) {
+        return userService.getAllUsers(isStudent.equals("true"));
     }
 
     @GetMapping("/roles")

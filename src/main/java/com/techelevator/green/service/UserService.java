@@ -34,7 +34,10 @@ public class UserService {
     @Autowired
     PasswordEncoder encoder;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(boolean isStudent) {
+        if (isStudent) {
+            return userRepository.findByStudentIsNotNull();
+        }
         return userRepository.findAll();
     }
 
