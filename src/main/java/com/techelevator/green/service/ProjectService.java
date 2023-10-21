@@ -1,6 +1,7 @@
 package com.techelevator.green.service;
 
 import com.techelevator.green.model.Project;
+import com.techelevator.green.model.auth.ERole;
 import com.techelevator.green.model.auth.User;
 import com.techelevator.green.repository.ProjectRepository;
 import com.techelevator.green.repository.UserRepository;
@@ -39,7 +40,7 @@ public class ProjectService {
 
     public Project updateProject(Long projectId, Project project, Principal principal) {
         Long userId = getUserId(principal);
-        if (!userId.equals(project.getStudent().getId())) {
+        if (!isAdmin(principal) && !userId.equals(project.getStudent().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to modify project.");
         }
 
@@ -62,14 +63,12 @@ public class ProjectService {
 
         Optional<Project> optProject = projectRepository.findById(projectId);
         if (optProject.isEmpty()) return;
-        if(!userId.equals(optProject.get().getStudent().getId())) {
+        if (!isAdmin(principal) && !userId.equals(optProject.get().getStudent().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to delete this project.");
         }
 
         projectRepository.deleteById(projectId);
     }
-
-
 
     private Long getUserId(Principal principal) {
         Optional<User> user = userRepository.findByUsername(principal.getName());
@@ -79,5 +78,12 @@ public class ProjectService {
         return user.get().getId();
     }
 
+    private boolean isAdmin(Principal principal) {
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Logged in user does not exist.");
+        }
 
+        return user.get().getRoles().stream().anyMatch(r -> r.getName().equals(ERole.ROLE_ADMIN));
+    }
 }

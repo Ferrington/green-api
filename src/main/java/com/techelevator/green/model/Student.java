@@ -1,5 +1,7 @@
 package com.techelevator.green.model;
 
+import com.fasterxml.jackson.annotation.*;
+import com.techelevator.green.model.auth.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,11 +15,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonPropertyOrder({ "id", "fanPageUrl", "portfolioUrl", "projects"})
 public class Student {
 
     @Id
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @MapsId
+    @JsonIncludeProperties({"username"})
+    private User user;
 
     @Column(name = "fan_page_url")
     private String fanPageUrl;
@@ -27,6 +36,7 @@ public class Student {
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @OneToMany(mappedBy="student")
+    @JsonIgnoreProperties({"student"})
     private List<Project> projects;
 
 }

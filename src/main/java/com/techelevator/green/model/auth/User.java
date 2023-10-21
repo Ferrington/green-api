@@ -1,7 +1,8 @@
 package com.techelevator.green.model.auth;
 
+import com.fasterxml.jackson.annotation.*;
+import com.techelevator.green.model.Student;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,40 +14,42 @@ import java.util.Set;
 
 @Entity
 @Table( name = "users", 
-        uniqueConstraints = { 
-          @UniqueConstraint(columnNames = "username"),
-          @UniqueConstraint(columnNames = "email") 
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username")
         })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonPropertyOrder({"id", "username", "password", "roles"})
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private Student student;
+
   @NotBlank
   @Size(max = 20)
   private String username;
 
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
+  private String setPasswordUrl;
 
   @NotBlank
   @Size(max = 120)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
-  public User(String username, String email, String password) {
+  public User(String username, String password, String setPasswordUrl) {
     this.username = username;
-    this.email = email;
     this.password = password;
+    this.setPasswordUrl = setPasswordUrl;
   }
 
 }
