@@ -8,25 +8,121 @@
 	},
 	"item": [
 		{
-			"name": "Student",
+			"name": "Admin",
 			"item": [
 				{
-					"name": "Auth",
+					"name": "User",
 					"item": [
 						{
-							"name": "Create Student",
+							"name": "Get All Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"user_id\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fanPageUrl\": \"https://ladderlearner.com\",\r\n    \"portfolioUrl\": \"https://google.com\"\r\n}",
+									"raw": "{\r\n    \"username\": \"test user\",\r\n    \"password\": \"testpassword\",\r\n    \"roles\": [\"student\", \"admin\"]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"new user name\",\r\n    \"roles\": [\"student\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/{{user_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/{{user_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Student",
+					"item": [
+						{
+							"name": "Get All Students",
+							"request": {
+								"method": "GET",
+								"header": [],
 								"url": {
 									"raw": "{{base_url}}/student",
 									"host": [
@@ -46,7 +142,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fanPageUrl\": \"https://someOtherSite.com\",\r\n    \"portfolioUrl\": \"https://someOtherSite.com\"\r\n}",
+									"raw": "{\r\n    \"fanPageUrl\": \"https://test.com\",\r\n    \"portfolioUrl\": \"yep\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -54,26 +150,60 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_url}}/student/1",
+									"raw": "{{base_url}}/student/{{student_id}}",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"student",
-										"1"
+										"{{student_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "Get All Projects",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/project",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"project"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Delete Student",
+							"name": "Create Project",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"project_id\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
-								"method": "DELETE",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fanPageUrl\": \"https://someOtherSite.com\",\r\n    \"portfolioUrl\": \"https://someOtherSite.com\"\r\n}",
+									"raw": "{\r\n    \"student\": {\r\n        \"id\": {{student_id}}\r\n    },\r\n    \"url\": \"somewebsite.com\",\r\n    \"name\": \"great website\",\r\n    \"description\": \"this website is pretty great\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -81,13 +211,203 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_url}}/student/1",
+									"raw": "{{base_url}}/project",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Project",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"student\": {\r\n        \"id\": {{student_id}}\r\n    },\r\n    \"url\": \"someotherwebsite.com\",\r\n    \"name\": \"pretty good website\",\r\n    \"description\": \"this website is good I guess\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/project/{{project_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"project",
+										"{{project_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Project",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/project/{{project_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"project",
+										"{{project_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"jwt\", jsonData.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"sausages\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/signin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Student Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.collectionVariables.set(\"jwt\", jsonData.accessToken);\r",
+											"pm.collectionVariables.set(\"student_id\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"student\",\r\n    \"password\": \"sausages\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/auth/signin",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Student",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fanPageUrl\": \"https://someOtherSite.com\",\r\n    \"portfolioUrl\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/student/{{student_id}}",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"student",
-										"1"
+										"{{student_id}}"
 									]
 								}
 							},
@@ -148,13 +468,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/student/1",
+							"raw": "{{base_url}}/student/{{student_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"student",
-								"1"
+								"{{student_id}}"
 							]
 						}
 					},
@@ -183,152 +503,22 @@
 			]
 		},
 		{
-			"name": "Test",
-			"item": [
-				{
-					"name": "Auth",
-					"item": [
-						{
-							"name": "User",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/test/user",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"test",
-										"user"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Mod",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/test/mod",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"test",
-										"mod"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Admin",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/test/admin",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"test",
-										"admin"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"auth": {
-						"type": "bearer",
-						"bearer": [
-							{
-								"key": "token",
-								"value": "{{jwt}}",
-								"type": "string"
-							}
-						]
-					},
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "All",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/test",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"test"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Signup",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-                  "raw": "{\r\n    \"username\": \"Your name here\",\r\n    \"email\": \"someone@gmail.com\",\r\n    \"role\": [\"student\"],\r\n    \"password\": \"sausages\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/auth/signup",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"auth",
-						"signup"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login",
+			"name": "Logout",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.collectionVariables.set(\"jwt\", jsonData.accessToken);"
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"jwt\", \"\");"
 						],
 						"type": "text/javascript"
 					}
@@ -339,7 +529,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-                  "raw": "{\r\n    \"username\": \"Your name here\",\r\n    \"password\": \"sausages\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -347,13 +537,9 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/auth/signin",
+					"raw": "{{base_url}}",
 					"host": [
 						"{{base_url}}"
-					],
-					"path": [
-						"auth",
-						"signin"
 					]
 				}
 			},
@@ -388,6 +574,21 @@
 		},
 		{
 			"key": "jwt",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "student_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "project_id",
 			"value": "",
 			"type": "string"
 		}
