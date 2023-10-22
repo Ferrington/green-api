@@ -1,9 +1,12 @@
 package com.techelevator.green.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.techelevator.green.model.auth.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,14 +31,18 @@ public class Student {
     @JsonIncludeProperties({"username"})
     private User user;
 
-    @Column(name = "fan_page_url")
     private String fanPageUrl;
 
-    @Column(name = "portfolio_url")
-    private String portfolioUrl;
+    @Size(max = 50)
+    private String fanPageTitle;
+
+    @Size(max = 255)
+    private String fanPageDescription;
+
+    private String githubUrl;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @OneToMany(mappedBy="student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"student"})
     private List<Project> projects;
 

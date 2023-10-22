@@ -26,6 +26,47 @@
 									"path": [
 										"user"
 									]
+                                }
+                            },
+                          "response": []
+                        },
+                      {
+                        "name": "Get All Users With Student",
+                        "request": {
+                          "method": "GET",
+                          "header": [],
+                          "url": {
+                            "raw": "{{base_url}}/user?student=true",
+                            "host": [
+                              "{{base_url}}"
+                            ],
+                            "path": [
+                              "user"
+                            ],
+                            "query": [
+                              {
+                                "key": "student",
+                                "value": "true"
+                              }
+                            ]
+                          }
+                        },
+                        "response": []
+                      },
+                      {
+                        "name": "Get User By UUID",
+                        "request": {
+                          "method": "GET",
+                          "header": [],
+                          "url": {
+                            "raw": "{{base_url}}/user/68dfcf9b77544d26be7385c4d6f18b7b",
+                            "host": [
+                              "{{base_url}}"
+                            ],
+                            "path": [
+                              "user",
+                              "68dfcf9b77544d26be7385c4d6f18b7b"
+                            ]
 								}
 							},
 							"response": []
@@ -122,7 +163,14 @@
 							"name": "Get All Students",
 							"request": {
 								"method": "GET",
-								"header": [],
+                              "header": [
+                                {
+                                  "key": "X-Admin",
+                                  "value": "true",
+                                  "type": "text",
+                                  "disabled": true
+                                }
+                              ],
 								"url": {
 									"raw": "{{base_url}}/student",
 									"host": [
@@ -347,7 +395,7 @@
 					"name": "Auth",
 					"item": [
 						{
-							"name": "Student Login",
+                          "name": "Student Login (Set Password First)",
 							"event": [
 								{
 									"listen": "test",
@@ -366,7 +414,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"student\",\r\n    \"password\": \"sausages\"\r\n}",
+                                  "raw": "{\r\n    \"username\": \"student\",\r\n    \"password\": \"tunamelt\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -449,7 +497,14 @@
 					"name": "Get All Students",
 					"request": {
 						"method": "GET",
-						"header": [],
+                      "header": [
+                        {
+                          "key": "X-Admin",
+                          "value": "true",
+                          "type": "text",
+                          "disabled": true
+                        }
+                      ],
 						"url": {
 							"raw": "{{base_url}}/student",
 							"host": [
@@ -543,6 +598,34 @@
 					]
 				}
 			},
+          "response": []
+        },
+      {
+        "name": "Set Password",
+        "request": {
+          "method": "PATCH",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"password\": \"tunamelt\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "{{base_url}}/user/setPassword/68dfcf9b77544d26be7385c4d6f18b7b",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "user",
+              "setPassword",
+              "68dfcf9b77544d26be7385c4d6f18b7b"
+            ]
+          }
+        },
 			"response": []
 		}
 	],

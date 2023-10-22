@@ -62,7 +62,9 @@ public class StudentService {
         Student existingStudent = optStudent.get();
         existingStudent.setId(studentId);
         existingStudent.setFanPageUrl(student.getFanPageUrl());
-        existingStudent.setPortfolioUrl(student.getPortfolioUrl());
+        existingStudent.setFanPageTitle(student.getFanPageTitle());
+        existingStudent.setFanPageDescription(student.getFanPageDescription());
+        existingStudent.setGithubUrl(student.getGithubUrl());
         existingStudent.setProjects(student.getProjects());
 
         return studentRepository.save(existingStudent);
