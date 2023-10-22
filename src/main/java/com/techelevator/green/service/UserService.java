@@ -4,11 +4,11 @@ import com.techelevator.green.model.Student;
 import com.techelevator.green.model.auth.ERole;
 import com.techelevator.green.model.auth.Role;
 import com.techelevator.green.model.auth.User;
+import com.techelevator.green.payload.request.SetPasswordRequest;
 import com.techelevator.green.payload.request.UserPatchRequest;
 import com.techelevator.green.repository.RoleRepository;
 import com.techelevator.green.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,27 +36,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<String> getRoles() {
-        return List.of("student", "admin");
-    }
-
-
-    public User updateUser(Long userId, UserPatchRequest user) {
-        Optional<User> optUser = userRepository.findById(userId);
+    public User getUserByUUID(String uuid) {
+        Optional<User> optUser = userRepository.findBySetPasswordUUID(uuid);
         if (optUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
         }
 
-        User existingUser = optUser.get();
-        existingUser.setId(userId);
-        existingUser.setUsername(user.getUsername());
-        existingUser.setRoles(mapRoles(user.getRoles()));
-
-        return userRepository.save(existingUser);
+        return optUser.get();
     }
 
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public List<String> getRoles() {
+        return List.of("student", "admin");
     }
 
     public User createUser(UserPatchRequest signUpRequest) {
@@ -81,6 +71,36 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public User updateUser(Long userId, UserPatchRequest user) {
+        Optional<User> optUser = userRepository.findById(userId);
+        if (optUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
+        }
+
+        User existingUser = optUser.get();
+        existingUser.setId(userId);
+        existingUser.setUsername(user.getUsername());
+        existingUser.setRoles(mapRoles(user.getRoles()));
+
+        return userRepository.save(existingUser);
+    }
+
+    public void setPassword(String uuid, SetPasswordRequest setPasswordRequest) {
+        Optional<User> optUser = userRepository.findBySetPasswordUUID(uuid);
+        if (optUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
+        }
+
+        User existingUser = optUser.get();
+        existingUser.setPassword(encoder.encode(setPasswordRequest.getPassword()));
+        existingUser.setSetPasswordUUID(null);
+        userRepository.save(existingUser);
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 
     private Set<Role> mapRoles(Set<String> strRoles) {

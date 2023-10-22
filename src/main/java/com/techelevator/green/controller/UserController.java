@@ -1,14 +1,12 @@
 package com.techelevator.green.controller;
 
-import com.techelevator.green.model.auth.Role;
 import com.techelevator.green.model.auth.User;
-import com.techelevator.green.payload.request.SignupRequest;
+import com.techelevator.green.payload.request.SetPasswordRequest;
 import com.techelevator.green.payload.request.UserPatchRequest;
 import com.techelevator.green.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +26,12 @@ public class UserController {
         return userService.getAllUsers(isStudent.equals("true"));
     }
 
+    @GetMapping("/{uuid}")
+    @PreAuthorize("permitAll()")
+    public User getUserByUUID(@PathVariable String uuid) {
+        return userService.getUserByUUID(uuid);
+    }
+
     @GetMapping("/roles")
     public List<String> getRoles() {
         return userService.getRoles();
@@ -42,6 +46,13 @@ public class UserController {
     @PatchMapping("/{userId}")
     public User updateUser(@PathVariable Long userId, @Valid @RequestBody UserPatchRequest user) {
         return userService.updateUser(userId, user);
+    }
+
+    @PreAuthorize("permitAll()")
+    @PatchMapping("/setPassword/{uuid}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void setPassword(@PathVariable String uuid, @RequestBody SetPasswordRequest setPasswordRequest) {
+        userService.setPassword(uuid, setPasswordRequest);
     }
 
     @DeleteMapping("/{userId}")

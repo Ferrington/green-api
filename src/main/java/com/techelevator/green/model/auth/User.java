@@ -1,6 +1,7 @@
 package com.techelevator.green.model.auth;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.techelevator.green.model.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -32,10 +33,11 @@ public class User {
   private Student student;
 
   @NotBlank
-  @Size(max = 20)
+  @Size(max = 50)
   private String username;
 
-  private String setPasswordUrl;
+  @Column(name = "set_password_uuid")
+  private String setPasswordUUID;
 
   @NotBlank
   @Size(max = 120)
@@ -46,10 +48,10 @@ public class User {
   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
-  public User(String username, String password, String setPasswordUrl) {
+  public User(String username, String password, String setPasswordUUID) {
     this.username = username;
     this.password = password;
-    this.setPasswordUrl = setPasswordUrl;
+    this.setPasswordUUID = setPasswordUUID;
   }
 
 }

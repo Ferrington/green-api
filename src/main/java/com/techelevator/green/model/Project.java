@@ -1,8 +1,6 @@
 package com.techelevator.green.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "projects")
+@Table(name = "projects", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "student_id"})})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
