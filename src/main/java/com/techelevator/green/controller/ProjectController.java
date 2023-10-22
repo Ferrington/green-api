@@ -32,8 +32,8 @@ public class ProjectController {
     @PostMapping
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Project createProject(@RequestBody Project project) {
-        return projectService.createProject(project);
+    public Project createProject(@RequestBody Project project, Principal principal) {
+        return projectService.createProject(project, principal);
     }
 
     @PutMapping(path="/{id}")
