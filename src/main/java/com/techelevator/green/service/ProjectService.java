@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,7 +35,19 @@ public class ProjectService {
     }
 
 
-    public Project createProject(Project project) {
+    public Project createProject(Project project, Principal principal) {
+        Long userId = getUserId(principal);
+
+        if(!userId.equals(project.getStudent().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to create project for another student.");
+        }
+
+        List<Project> prevProjects = projectRepository.findProjectsByStudent(project.getStudent());
+        for (Project p: prevProjects) {
+            if (project.getName().equals(p.getName())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "This project name already exists for this student.");
+            }
+        }
         return projectRepository.save(project);
     }
 
